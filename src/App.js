@@ -13,19 +13,27 @@ class App extends Component {
     // pending > resolved (success) OR rejected (failure)
     const { data: posts } = await axios.get(apiEndpoint);
     this.setState({ posts })
+
   };
 
   handleAdd = async () => {
     const obj = { title: 'a', body: 'b' };
     const { data: post } = await axios.post(apiEndpoint, obj);
-    
+
     const posts = [post, ...this.state.posts];
     this.setState({ posts });
   }
 
-  handleUpdate = post => {
-    console.log("Update", post);
+  handleUpdate = async post => {
+    post.title = 'UPDATED';
+    await axios.put(apiEndpoint + '/' + post.id, post);
+
+    const posts = [...this.state.posts];
+    const index = posts.indexOf(post);
+    posts[index] = { ...post };
+    this.setState({ posts });
   };
+  // console.log("Update", post);
 
   handleDelete = post => {
     console.log("Delete", post);
