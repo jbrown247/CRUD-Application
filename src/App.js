@@ -35,8 +35,11 @@ class App extends Component {
   };
   // console.log("Update", post);
 
-  handleDelete = post => {
-    console.log("Delete", post);
+  handleDelete = async post => {
+    await axios.delete(apiEndpoint + '/' + post.id)
+
+    const posts = this.state.posts.filter(p => p.id !== post.id);
+    this.setState({ posts });
   };
 
   render() {
