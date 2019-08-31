@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import axios from 'axios';
 import "./App.css";
 
+axios.interceptors.response.use(null, error => {
+  console.log('INTERCEPTOR CALLED');
+  return Promise.reject(error);
+});
+
 const apiEndpoint = 'https://jsonplaceholder.typicode.com/posts';
 
 class App extends Component {
@@ -43,9 +48,12 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await axios.delete('s' + apiEndpoint + '/' + post.id);
+      await axios.delete(apiEndpoint + '999');
     }
     catch (ex) {
+      console.log('HANDLE DELETE CATCH BLOCK');
+
+
       if (ex.response && ex.response.status === 404)
         alert('This post has already been deleted.');
 
@@ -57,6 +65,8 @@ class App extends Component {
       this.setState({ posts: originalPosts });
     }
   };
+
+
 
 
   render() {
