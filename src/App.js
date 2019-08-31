@@ -3,7 +3,17 @@ import axios from 'axios';
 import "./App.css";
 
 axios.interceptors.response.use(null, error => {
-  console.log('INTERCEPTOR CALLED');
+
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
+
+  if (!expectedError) {
+    console.log('Logging the error', error);
+    alert('An unexpected error occurred');
+  }
+
   return Promise.reject(error);
 });
 
@@ -48,25 +58,15 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await axios.delete(apiEndpoint + '999');
+      await axios.delete(apiEndpoint + '999' + post.id);
     }
     catch (ex) {
-      console.log('HANDLE DELETE CATCH BLOCK');
-
-
       if (ex.response && ex.response.status === 404)
         alert('This post has already been deleted.');
-
-      else {
-        console.log('Logging the error', ex);
-        alert('An unexpected error occurred');
-      }
 
       this.setState({ posts: originalPosts });
     }
   };
-
-
 
 
   render() {
