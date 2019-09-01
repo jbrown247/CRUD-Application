@@ -58,7 +58,7 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await axios.delete(apiEndpoint + '999' + post.id);
+      await axios.delete('s' + apiEndpoint + '/' + post.id);
     }
     catch (ex) {
       if (ex.response && ex.response.status === 404)
